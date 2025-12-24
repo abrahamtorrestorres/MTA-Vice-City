@@ -654,10 +654,23 @@ end
 addEventHandler("onClientClick",root,CreateBlip)
 
 function getWorldFromMapPosition(mapX, mapY)
+    local absoluteX = mapX * Display.Width
+    local absoluteY = mapY * Display.Height
+	
+    local screenCenterX = Bigmap.PosX + (Bigmap.Width / 2)
+    local screenCenterY = Bigmap.PosY + (Bigmap.Height / 2)
 
-	local worldX = playerX + ((mapX * ((Bigmap.Width * Bigmap.CurrentZoom) * 2)) - (Bigmap.Width * Bigmap.CurrentZoom))*2;
-	local worldY = playerY + (((mapY * ((Bigmap.Height * Bigmap.CurrentZoom) * 2)) - (Bigmap.Height * Bigmap.CurrentZoom))*2) * -1;
+    local offsetScreenX = absoluteX - screenCenterX
+    local offsetScreenY = absoluteY - screenCenterY
+	
+    local offsetTextureX = offsetScreenX * Bigmap.CurrentZoom
+    local offsetTextureY = offsetScreenY * Bigmap.CurrentZoom
+	
+    local offsetWorldX = offsetTextureX / Minimap.MapUnit
+    local offsetWorldY = offsetTextureY / Minimap.MapUnit
+    local worldX = playerX + offsetWorldX
+    local worldY = playerY - offsetWorldY
 
-	return worldX, worldY;
+    return worldX, worldY
 end
 
